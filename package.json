@@ -1,0 +1,15 @@
+{
+  "name": "D3js",
+  "version": "1.0.0",
+  "description": "D3js app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "saikiran_hegde",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-webserver": "^0.9.1"
+  }
+}
