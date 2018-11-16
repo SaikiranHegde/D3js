@@ -42,3 +42,12 @@ d3.select('#viz')
     .attr('y', (d) => {
         return height - yScale(d);
     })
+    .on('mouseover', function(d) {
+        color = this.style.fill;
+        d3.select(this)
+            .style('fill', 'yellow');
+    })
+    .on('mouseout', function(d) {
+        d3.select(this)
+            .style('fill', color);
+    })
