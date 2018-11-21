@@ -1,7 +1,7 @@
 d3.json('../data/forecast.json', (data) => {
     let temperatures = [];
     let color;
-    const height = 400, width = 600, barWidth = 50, barOffset = 5;
+    const height = 400, width = 600;
 
     for (let i = 0; i < data.list.length; i++) {
         temperatures.push(data.list[i].main.temp);
@@ -13,12 +13,14 @@ d3.json('../data/forecast.json', (data) => {
 
     let xScale = d3.scaleBand()
         .domain(temperatures)
-        .paddingInner(.3)
+        .paddingInner(.2)
         .range([0, width]);
 
+    let maxTemperature = d3.max(temperatures);
+
     let colors = d3.scaleLinear()
-        .domain([0, temperatures.length * .33, temperatures.length * .66, temperatures.length])
-        .range(['#FFB832', '#C61C6F', '#268BD2', '#85992C']);
+        .domain([0, (maxTemperature * .5), (maxTemperature)])
+        .range(['#FFFFFF', '#2D8BCF', '#DA3637']);
 
     let tooltip = d3.select('body')
         .append('div')
@@ -35,9 +37,7 @@ d3.json('../data/forecast.json', (data) => {
         .selectAll('rect').data(temperatures)
         .enter()
         .append('rect')
-        .attr('fill', (d, i) => {
-            return colors(i);
-        })
+        .attr('fill', colors)
         .attr('width', (d) => {
             return xScale.bandwidth();
         })
@@ -51,7 +51,9 @@ d3.json('../data/forecast.json', (data) => {
                 .duration(200)
                 .style('opacity', .9);
 
-            tooltip.html(d)
+            tooltip.html(
+                '<div style="font-size: 2rem; font-weight: bold">' + d + '&deg;</div>'
+                )
                 .style('left', (d3.event.pageX - 35) + 'px')
                 .style('top', (d3.event.pageY - 30) + 'px');
 
