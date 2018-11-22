@@ -1,5 +1,5 @@
 d3.json('../data/forecast.json', (data) => {
-    let temperatures = [];
+    let temperatures = [], dates = [];
     let color;
     let margin = { top: 0, right: 0, bottom: 20, left: 25 };
     let height = 400 - margin.top - margin.bottom,
@@ -7,6 +7,7 @@ d3.json('../data/forecast.json', (data) => {
 
     for (let i = 0; i < data.list.length; i++) {
         temperatures.push(data.list[i].main.temp);
+        dates.push(new Date(data.list[i].dt_txt));
     }
 
     let yScale = d3.scaleLinear()
@@ -22,6 +23,11 @@ d3.json('../data/forecast.json', (data) => {
         .domain(temperatures)
         .paddingInner(.2)
         .range([0, width]);
+    let xAxisValues = d3.scaleTime()
+        .domain([dates[0], dates[(dates.length - 1)]])
+        .range([0, width]);
+    let xAxisTicks = d3.axisBottom(xAxisValues)
+        .ticks(d3.timeDay.every(1));
 
     let maxTemperature = d3.max(temperatures);
 
@@ -82,6 +88,10 @@ d3.json('../data/forecast.json', (data) => {
     let yGuide = d3.select('#viz svg').append('g')
         .attr('transform', 'translate(20, 0)')
         .call(yAxisTicks);
+
+    let xGuide = d3.select('#viz svg').append('g')
+        .attr('transform', 'translate(20,' + height +')')
+        .call(xAxisTicks);
 
     myChart.transition()
         .attr('height', (d) => {
